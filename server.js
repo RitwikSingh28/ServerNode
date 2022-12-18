@@ -33,6 +33,7 @@ app.use('/subdir' ,express.static(path.join(__dirname, 'public')));
 
 app.use('/', require('./routes/root'));
 app.use('/subdir', require('./routes/subdir')); 
+app.use('/employees', require('./routes/api/employees'));
 
 //using app.all() to handle all other events
 app.all('/*', (req, res) => {
