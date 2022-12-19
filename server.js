@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 
+const corsOptions = require('./config/corsConfig');
 const cors = require('cors');
 const { logger } = require('./middleware/logEvents');
 const errorHandler = require('./middleware/errorHandler');
@@ -11,21 +12,11 @@ const PORT = process.env.PORT || 3500;
 //refactored 
 app.use(logger);
 
-//Cross-Origin resource sharing for allowing access from domains
-//Allowing only select few domains to access the server 
-//use of third-party middleware
-const whitelist = ['https://www.someSampleWebsite.com', 'http://localhost:3500', 'http://127.0.0.1:5500'];
-const corsOptions = {
-    origin: (origin, callback) => {
-        if(whitelist.indexOf(origin) != -1 || !origin){
-            callback(null, true);
-        }else{
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-    optionsSuccessStatus: 200
-};
+//Cross Origin Resource Sharing controller
 app.use(cors(corsOptions));
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 //using built-in middleware for delivering static content
 app.use(express.static(path.join(__dirname, 'public')));
